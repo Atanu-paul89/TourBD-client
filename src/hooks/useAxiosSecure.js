@@ -6,7 +6,7 @@ import { AuthContext } from "../providers/AuthContext";
 
 
 const axiosSecure = axios.create({
-    baseURL: 'http://localhost:5000', 
+    baseURL: 'https://tour-system-server.vercel.app', 
     withCredentials: true, 
 });
 

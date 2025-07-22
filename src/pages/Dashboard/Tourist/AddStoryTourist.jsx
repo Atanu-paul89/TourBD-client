@@ -13,7 +13,7 @@ const AddStoryTourist = () => {
     const addStoryMutation = useMutation({
         mutationFn: async (newStoryData) => {
             const token = localStorage.getItem('access-token'); 
-            const res = await axios.post('http://localhost:5000/stories', newStoryData, {
+            const res = await axios.post('https://tour-system-server.vercel.app/stories', newStoryData, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }

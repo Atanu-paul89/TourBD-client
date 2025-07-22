@@ -12,7 +12,7 @@ const TourGuideProfile = () => {
       if (!id) {
         throw new Error('Tour Guide ID is missing');
       }
-      const response = await axios.get(`http://localhost:5000/tour-guides/${id}`);
+      const response = await axios.get(`https://tour-system-server.vercel.app/tour-guides/${id}`);
       return response.data;
     },
     enabled: !!id, 

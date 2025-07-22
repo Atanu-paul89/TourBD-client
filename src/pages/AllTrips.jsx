@@ -11,7 +11,7 @@ const AllTrips = () => {
   const { data: packages, isLoading, isError, error } = useQuery({ 
     queryKey: ['allPackages'],
     queryFn: async () => {
-      const response = await axios.get('http://localhost:5000/packages');
+      const response = await axios.get('https://tour-system-server.vercel.app/packages');
       return response.data;
     }
   });

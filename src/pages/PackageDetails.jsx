@@ -23,7 +23,7 @@ const PackageDetails = () => {
         queryKey: ['packageDetails', id],
         queryFn: async () => {
             if (!id) throw new Error('Package ID is missing');
-            const response = await axios.get(`http://localhost:5000/packages/${id}`);
+            const response = await axios.get(`https://tour-system-server.vercel.app/packages/${id}`);
             return response.data;
         },
         refetchOnWindowFocus: false,
@@ -38,7 +38,7 @@ const PackageDetails = () => {
                 return [];
             }
             const guidePromises = packageDetails.tourGuides.map(guideId =>
-                axios.get(`http://localhost:5000/tour-guides/${guideId}`)
+                axios.get(`https://tour-system-server.vercel.app/tour-guides/${guideId}`)
             );
             const responses = await Promise.all(guidePromises);
             return responses.map(res => res.data);
@@ -86,7 +86,7 @@ const PackageDetails = () => {
         };
 
         try {
-            const res = await axiosSecure.post('http://localhost:5000/bookings', bookingInfo);
+            const res = await axiosSecure.post('https://tour-system-server.vercel.app/bookings', bookingInfo);
 
             if (res.data.bookingId) {
                 toast.success("Tour booked successfully!");

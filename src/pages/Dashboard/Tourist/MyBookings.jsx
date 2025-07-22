@@ -17,7 +17,7 @@ const MyBookings = () => {
                 return [];
             }
             const token = localStorage.getItem('access-token');
-            const res = await axios.get(`http://localhost:5000/bookings`, {
+            const res = await axios.get(`https://tour-system-server.vercel.app/bookings`, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }
@@ -30,7 +30,7 @@ const MyBookings = () => {
     const cancelBookingMutation = useMutation({
         mutationFn: async (bookingId) => {
             const token = localStorage.getItem('access-token');
-            const res = await axios.patch(`http://localhost:5000/bookings/${bookingId}/cancel`, {}, {
+            const res = await axios.patch(`https://tour-system-server.vercel.app/bookings/${bookingId}/cancel`, {}, {
                 headers: {
                     authorization: `Bearer ${token}`
                 }

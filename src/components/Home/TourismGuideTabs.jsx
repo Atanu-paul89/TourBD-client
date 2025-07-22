@@ -11,7 +11,7 @@ const TourismGuideTabs = () => {
   const { data: packages, isLoading: packagesLoading, isError: packagesError } = useQuery({
     queryKey: ['topPackages'],
     queryFn: async () => {
-      const response = await axios.get('http://localhost:5000/packages');
+      const response = await axios.get('https://tour-system-server.vercel.app/packages');
 
       return response.data.slice(0, 3); 
     }
@@ -21,7 +21,7 @@ const TourismGuideTabs = () => {
   const { data: tourGuides, isLoading: guidesLoading, isError: guidesError } = useQuery({
     queryKey: ['topTourGuides'],
     queryFn: async () => {
-      const response = await axios.get('http://localhost:5000/tourGuides'); 
+      const response = await axios.get('https://tour-system-server.vercel.app/tourGuides'); 
       return response.data.slice(0, 3); 
     }
   });

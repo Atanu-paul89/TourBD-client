@@ -12,19 +12,19 @@ import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 const bannerData = [
   {
     id: 1,
-    image: '/src/assets/images/banner-bg.jpg', 
+    image: '/banner-bg.jpg', 
     title: 'Discover Serene Landscapes',
     description: 'Explore the tranquil beauty of Bangladesh\'s natural wonders and hidden gems.',
   },
   {
     id: 2,
-    image: '/src/assets/images/banner-bg2.jpg', 
+    image: '/banner-bg2.jpg', 
     title: 'Immerse in Rich Culture',
     description: 'Experience the vibrant traditions, warm hospitality, and delicious cuisine of Bangladesh.',
   },
   {
     id: 3,
-    image: '/src/assets/images/banner-bg3.jpg', 
+    image: '/banner-bg3.jpg', 
     title: 'Adventure Awaits You',
     description: 'Embark on thrilling journeys, from lush tea gardens to the world\'s largest mangrove forest.',
   },

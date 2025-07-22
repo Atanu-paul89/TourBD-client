@@ -70,14 +70,14 @@ const AuthProvider = ({ children }) => {
         // 1. User is logged in via Firebase. 
         try {
 
-          const userDbSaveRes = await axios.post('http://localhost:5000/users', {
+          const userDbSaveRes = await axios.post('https://tour-system-server.vercel.app/users', {
             email: currentUser.email,
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
           });
 
           // Request JWT from your backend
-          const jwtRes = await axios.post('http://localhost:5000/jwt', {
+          const jwtRes = await axios.post('https://tour-system-server.vercel.app/jwt', {
             email: currentUser.email
           });
 
@@ -87,7 +87,7 @@ const AuthProvider = ({ children }) => {
           }
 
           // Fetch the full user data with role 
-          const roleRes = await axios.get(`http://localhost:5000/users/email/${currentUser.email}`);
+          const roleRes = await axios.get(`https://tour-system-server.vercel.app/users/email/${currentUser.email}`);
 
           setUser({
             ...currentUser,

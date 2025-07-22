@@ -8,7 +8,7 @@ const Footer = () => {
     <footer className="footer footer-center p-8 bg-[#FFF5E4] text-base-content rounded border-t border-gray-300 pt-6 hover:border-blue-500 transition-all duration-300 ">
       <aside>
         <Link to="/" className="normal-case text-3xl font-bold text-danger-light">
-          <img src="/src/assets/images/logo.png" alt="Logo" className="j-10 lg:h-15  w-auto inline-block" /> 
+          <img src="/logo.png" alt="Logo" className="j-10 lg:h-15  w-auto inline-block" /> 
         </Link>
         <p className='font-semibold'>Follow US</p>
         <div className="grid grid-flow-col gap-4">

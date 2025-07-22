@@ -12,7 +12,7 @@ const AboutUs = () => {
             name: "Atanu Paul",
             role: "Founder & Lead Developer",
             bio: "Commited to creating seamless travel experiences and Experienced webDeveloper.",
-            image: "https://www.shutterstock.com/image-photo/happy-middle-aged-50-years-260nw-2426323983.jpg", 
+            image: "/paul.jpg", 
             linkedin: "https://www.linkedin.com/in/atanupaul",
             github: "https://github.com/atanupaul"
         },
@@ -28,7 +28,7 @@ const AboutUs = () => {
             name: "Md. Josh Garfield", 
             role: "Cheif Advisor",
             bio: "Experienced guide with a deep knowledge of Bangladeshi culture  . Loves storytelling.",
-            image: "https://thumbs.dreamstime.com/b/old-rich-man-sun-glasses-beard-street-smiling-happy-portrait-186141549.jpg", 
+            image: "/josh.png", 
             linkedin: "https://www.linkedin.com/in/aminulislam",
             github: null
         },
