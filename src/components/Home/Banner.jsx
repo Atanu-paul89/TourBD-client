@@ -1,19 +1,14 @@
 
 import { motion } from 'framer-motion';
 import { Link } from 'react-router';
-
-// Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/pagination';
 import 'swiper/css/navigation'; 
 
-// Import required modules
 import { Autoplay, Pagination, Navigation } from 'swiper/modules';
 
-// Dummy banner data - REPLACE WITH YOUR ACTUAL IMAGES AND CONTENT
 const bannerData = [
   {
     id: 1,
@@ -37,20 +32,20 @@ const bannerData = [
 
 const Banner = () => {
   return (
-    <section className="relative h-screen overflow-hidden"> {/* Added overflow-hidden for cleaner look */}
+    <section className="relative h-screen overflow-hidden"> 
       <Swiper
-        spaceBetween={0} // No space between slides for a continuous look
+        spaceBetween={0} 
         centeredSlides={true}
         autoplay={{
-          delay: 1500, // Time in ms between slide transitions (4.5 seconds)
-          disableOnInteraction: false, // Keep autoplay even if user interacts
+          delay: 1500, 
+          disableOnInteraction: false, 
         }}
         pagination={{
-          clickable: true, // Dots at the bottom
+          clickable: true, 
         }}
-        navigation={false} // Navigation arrows (left/right)
+        navigation={false} 
         modules={[Autoplay, Pagination, Navigation]}
-        className="mySwiper h-full w-full" // Ensure Swiper takes full height and width
+        className="mySwiper h-full w-full" 
       >
         {bannerData.map((slide) => (
           <SwiperSlide key={slide.id}>
@@ -58,7 +53,7 @@ const Banner = () => {
               className="relative h-full w-full bg-cover bg-center flex items-center justify-center text-white"
               style={{ backgroundImage: `url('${slide.image}')` }}
             >
-              {/* Overlay for better text readability */}
+
               <div className="absolute inset-0 bg-black opacity-50"></div>
 
               <div className="relative z-10 text-center p-4">
@@ -83,7 +78,6 @@ const Banner = () => {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ duration: 0.8, delay: 0.6 }}
                 >
-                  {/* Button color using direct hex code #FF9494 */}
                   <Link to="/all-trips" className="btn bg-[#FF9494] text-white border-none hover:bg-[#E07B7B] text-lg px-8 py-3 rounded-full shadow-lg">
                     Explore Now
                   </Link>
