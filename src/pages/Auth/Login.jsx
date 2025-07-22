@@ -1,9 +1,9 @@
-// tourism-management-system/client/src/pages/Auth/Login.jsx
+
 import React, { useContext } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router';
-import { AuthContext } from '../../providers/AuthContext'; // Adjust path if needed
-import { useForm } from 'react-hook-form'; // For form validation
-import Swal from 'sweetalert2'; // For sweet alert
+import { AuthContext } from '../../providers/AuthContext'; 
+import { useForm } from 'react-hook-form'; 
+import Swal from 'sweetalert2'; 
 
 const Login = () => {
   const { signIn, signInWithGoogle } = useContext(AuthContext);
@@ -12,7 +12,6 @@ const Login = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  // Determine where to redirect after login (either previous location or home)
   const from = location.state?.from?.pathname || '/';
 
   const onSubmit = async (data) => {
@@ -24,7 +23,7 @@ const Login = () => {
         title: 'Login Successful!',
         text: 'Welcome back!',
       });
-      navigate(from, { replace: true }); // Redirect to previous location or home
+      navigate(from, { replace: true }); 
     } catch (error) {
       console.error('Login error:', error);
       Swal.fire({
@@ -43,7 +42,7 @@ const Login = () => {
         title: 'Login Successful!',
         text: 'Welcome back!',
       });
-      navigate(from, { replace: true }); // Redirect to previous location or home
+      navigate(from, { replace: true }); 
     } catch (error) {
       console.error('Google Sign-in error:', error);
       Swal.fire({
@@ -55,9 +54,9 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FFE3E1] p-4"> {/* Using #FFE3E1 for background */}
+    <div className="min-h-screen flex items-center justify-center bg-[#FFE3E1] p-4"> 
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-[#FF9494] mb-8">Login to Your Account</h2> {/* Using #FF9494 for text */}
+        <h2 className="text-3xl font-bold text-center text-[#FF9494] mb-8">Login to Your Account</h2> 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">
@@ -111,7 +110,7 @@ const Login = () => {
           Don't have an account? <Link to="/register" className="text-[#FF9494] hover:underline">Register here</Link>
         </p>
         <p className="text-center text-gray-600 text-sm mt-2">
-          <Link to="/forgot-password" className="text-[#FF9494] hover:underline">Forgot Password?</Link> {/* Will create this later */}
+          <Link to="/forgot-password" className="text-[#FF9494] hover:underline">Forgot Password?</Link> 
         </p>
       </div>
     </div>

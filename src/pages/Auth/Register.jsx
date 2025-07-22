@@ -1,16 +1,16 @@
-// tourism-management-system/client/src/pages/Auth/Register.jsx
+
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { AuthContext } from '../../providers/AuthContext'; // Adjust path if needed
-import { useForm } from 'react-hook-form'; // For form validation
-import Swal from 'sweetalert2'; // For sweet alert
+import { AuthContext } from '../../providers/AuthContext'; 
+import { useForm } from 'react-hook-form'; 
+import Swal from 'sweetalert2'; 
 
 const Register = () => {
   const { createUser, userUpdateProfile, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const { register, handleSubmit, formState: { errors }, watch } = useForm();
-  const password = watch("password"); // Watch password field for confirmation
+  const password = watch("password"); 
 
   const onSubmit = async (data) => {
     const { name, email, photoURL, password: userPassword } = data;
@@ -50,14 +50,11 @@ const Register = () => {
     }
 
     try {
-      // 1. Create user in Firebase
+
       await createUser(email, userPassword);
 
-      // 2. Update user profile (name and photoURL)
       await userUpdateProfile(name, photoURL);
 
-      // 3. Log out user after registration (optional, but common to force login after registration)
-      // This is a design choice. You could also keep them logged in and redirect to homepage.
       await logOut(); 
       
       Swal.fire({
@@ -65,7 +62,7 @@ const Register = () => {
         title: 'Registration Successful!',
         text: 'Your account has been created. Please log in.',
       });
-      navigate('/login'); // Redirect to login page
+      navigate('/login'); 
       
     } catch (error) {
       console.error('Registration error:', error);
@@ -78,9 +75,9 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#FFF5E4] p-4"> {/* Using #FFF5E4 for background */}
+    <div className="min-h-screen flex items-center justify-center bg-[#FFF5E4] p-4"> 
       <div className="bg-white p-8 rounded-lg shadow-xl w-full max-w-md">
-        <h2 className="text-3xl font-bold text-center text-[#FF9494] mb-8">Register Now</h2> {/* Using #FF9494 for text */}
+        <h2 className="text-3xl font-bold text-center text-[#FF9494] mb-8">Register Now</h2> 
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">

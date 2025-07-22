@@ -1,25 +1,24 @@
-// src/pages/Auth/ForgotPassword.jsx
+
 import React, { useContext } from 'react';
 import { Link } from 'react-router';
-import { AuthContext } from '../../providers/AuthContext'; // Adjust path if needed
+import { AuthContext } from '../../providers/AuthContext'; 
 import { useForm } from 'react-hook-form';
-import Swal from 'sweetalert2'; // For sweet alert
+import Swal from 'sweetalert2'; 
 
 const ForgotPassword = () => {
-    const { resetPassword } = useContext(AuthContext); // Get resetPassword from AuthContext
+    const { resetPassword } = useContext(AuthContext); 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
     const onSubmit = async (data) => {
         const { email } = data;
         try {
-            await resetPassword(email); // Call the resetPassword function
+            await resetPassword(email); 
             Swal.fire({
                 icon: 'success',
                 title: 'Password Reset Email Sent!',
                 text: 'Please check your inbox (and spam folder) for instructions to reset your password.',
             });
-            // Optionally, redirect the user back to the login page after success
-            // navigate('/login'); 
+
         } catch (error) {
             console.error('Password reset error:', error);
             Swal.fire({
