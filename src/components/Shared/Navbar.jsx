@@ -78,7 +78,7 @@ const Navbar = () => {
         {/* Left Section: Logo and Website Name */}
         <Link to="/" className="flex items-center space-x-2">
           <img
-            src="/src/assets/images/logo.png"
+            src="/logo.png"
             alt="TourBD Logo"
             className="w-10 h-10 md:w-12 md:h-12"
           />
