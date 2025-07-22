@@ -1,8 +1,7 @@
-// src/components/MyAssignedTours.jsx
 import React, { useContext, useState, useEffect } from 'react';
-import { AuthContext } from '../../../providers/AuthContext'; // Adjust path as needed
+import { AuthContext } from '../../../providers/AuthContext'; 
 import Swal from 'sweetalert2';
-import { FaEye } from 'react-icons/fa'; // For view icon, install react-icons if not already: npm install react-icons
+import { FaEye } from 'react-icons/fa'; 
 
 const MyAssignedTours = () => {
     const { user, loading, axiosSecure } = useContext(AuthContext);
@@ -14,7 +13,6 @@ const MyAssignedTours = () => {
             if (user?.email && axiosSecure) {
                 try {
                     setToursLoading(true);
-                    // Fetch bookings for the current guide with 'accepted' status
                     const response = await axiosSecure.get(`/bookings/guide/${user.email}?status=accepted`);
                     setAssignedTours(response.data);
                 } catch (error) {
@@ -80,7 +78,7 @@ const MyAssignedTours = () => {
                             <th className="py-3 px-4 text-left font-semibold">Booking Date</th>
                             <th className="py-3 px-4 text-left font-semibold">Price</th>
                             <th className="py-3 px-4 text-left font-semibold">Status</th>
-                            {/* <th className="py-3 px-4 text-center font-semibold">Actions</th> */}
+                         
                         </tr>
                     </thead>
                     <tbody>
@@ -99,16 +97,7 @@ const MyAssignedTours = () => {
                                         {tour.status}
                                     </span>
                                 </td>
-                                {/* You can add actions here like 'View Details' for a specific tour */}
-                                {/* <td className="py-3 px-4 text-center">
-                                    <button
-                                        onClick={() => Swal.fire('View Details', `Details for ${tour.packageName}`, 'info')}
-                                        className="text-[#FF5F7F] hover:text-[#FF9494] transition-colors duration-200"
-                                        title="View Details"
-                                    >
-                                        <FaEye className="inline-block mr-1" /> View
-                                    </button>
-                                </td> */}
+
                             </tr>
                         ))}
                     </tbody>

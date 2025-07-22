@@ -10,10 +10,9 @@ const AddStoryTourist = () => {
     const queryClient = useQueryClient();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-    // Mutation to add a new story
     const addStoryMutation = useMutation({
         mutationFn: async (newStoryData) => {
-            const token = localStorage.getItem('access-token'); // Assuming token is stored in localStorage
+            const token = localStorage.getItem('access-token'); 
             const res = await axios.post('http://localhost:5000/stories', newStoryData, {
                 headers: {
                     authorization: `Bearer ${token}`
@@ -28,8 +27,7 @@ const AddStoryTourist = () => {
                 text: 'Your story has been successfully added.',
                 confirmButtonText: 'OK',
             });
-            reset(); // Clear form fields after successful submission
-            // Optionally invalidate queries if you have a 'myStories' query elsewhere
+            reset(); 
             queryClient.invalidateQueries(['myStories', user?.email]);
         },
         onError: (err) => {
@@ -43,15 +41,14 @@ const AddStoryTourist = () => {
     });
 
     const onSubmit = (data) => {
-        // Construct the story data
+
         const storyData = {
             title: data.title,
             story: data.story,
-            authorEmail: user?.email, // Automatically get email from logged-in user
-            authorName: user?.displayName || 'Anonymous', // Get display name, or default
-            date: new Date().toISOString(), // Current date
-            // You might want to add an image upload field later
-            // image: data.image // if you implement image upload
+            authorEmail: user?.email, 
+            authorName: user?.displayName || 'Anonymous', 
+            date: new Date().toISOString(), 
+
         };
         addStoryMutation.mutate(storyData);
     };
@@ -91,20 +88,6 @@ const AddStoryTourist = () => {
                     ></textarea>
                     {errors.story && <p className="text-red-500 text-xs italic mt-1">{errors.story.message}</p>}
                 </div>
-
-                {/* You might consider adding an image upload field here later */}
-                {/* <div>
-                    <label htmlFor="image" className="block text-gray-700 text-sm font-bold mb-2">
-                        Upload an Image (Optional)
-                    </label>
-                    <input
-                        type="file"
-                        id="image"
-                        {...register('image')}
-                        className="file-input file-input-bordered file-input-primary w-full max-w-xs" // Example with daisyUI file input
-                    />
-                    {errors.image && <p className="text-red-500 text-xs italic mt-1">{errors.image.message}</p>}
-                </div> */}
 
                 <button
                     type="submit"
