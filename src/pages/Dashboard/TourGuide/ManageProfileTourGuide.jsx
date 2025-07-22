@@ -1,6 +1,3 @@
-
-
-// src/components/ManageProfileTourGuide.jsx
 import React, { useContext, useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import { AuthContext } from '../../../providers/AuthContext';
@@ -8,44 +5,38 @@ import useAxiosSecure from '../../../hooks/useAxiosSecure';
 
 
 const ManageProfileTourGuide = () => {
-    const { user, loading } = useContext(AuthContext); // Get axiosSecure
+    const { user, loading } = useContext(AuthContext); 
     const axiosSecure = useAxiosSecure();
     
-    const [guideExtraProfile, setGuideExtraProfile] = useState(null); // For guide-specific fields (experience, bio)
+    const [guideExtraProfile, setGuideExtraProfile] = useState(null); 
     const [extraProfileLoading, setExtraProfileLoading] = useState(true);
     const [isEditing, setIsEditing] = useState(false);
     const [formData, setFormData] = useState({
-        name: user?.displayName || user?.name || '', // Initialize with user.displayName or user.name from AuthContext
+        name: user?.displayName || user?.name || '', 
         photoURL: user?.photoURL || '',
-        experience: user?.experience || '', // These will be fetched from tourGuidesCollection
-        bio: ''        // These will be fetched from tourGuidesCollection
+        experience: user?.experience || '', 
+        bio: ''        
     });
     const [updateLoading, setUpdateLoading] = useState(false);
 
-    // Effect to fetch additional guide-specific profile data (experience, bio)
     useEffect(() => {
         const fetchExtraGuideProfile = async () => {
             if (user?.email && axiosSecure) {
                 try {
                     setExtraProfileLoading(true);
-                    // This endpoint needs to fetch from the tourGuidesCollection by email.
-                    // If your backend doesn't have /tour-guides/email/:email, this will fail.
-                    // Based on your network tab, /users/email/:email works.
-                    // Let's assume for now you will add /tour-guides/email/:email to backend.
                     const response = await axiosSecure.get(`/tour-guides/email/${user.email}`);
                     setGuideExtraProfile(response.data);
                     setFormData(prev => ({
                         ...prev,
-                        name: response.data.name || user.displayName || user.name || '', // Use data from tourGuidesCollection if available
+                        name: response.data.name || user.displayName || user.name || '', 
                         photoURL: response.data.photoURL || user.photoURL || '',
                         experience: response.data.experience || '',
                         bio: response.data.bio || ''
                     }));
                 } catch (error) {
                     console.error("Error fetching extra tour guide profile data:", error);
-                    // It's okay if this specific endpoint isn't found if guide-specific data isn't critical
-                    // We will still display basic profile from `user` object.
-                    setGuideExtraProfile(null); // Clear extra profile data on error
+
+                    setGuideExtraProfile(null); 
                 } finally {
                     setExtraProfileLoading(false);
                 }
@@ -54,18 +45,16 @@ const ManageProfileTourGuide = () => {
             }
         };
 
-        if (!loading && user) { // Only attempt to fetch if AuthContext is done loading and user is present
+        if (!loading && user) { 
             fetchExtraGuideProfile();
         }
-    }, [user, loading, axiosSecure]); // Re-run when user, loading, or axiosSecure changes
+    }, [user, loading, axiosSecure]); 
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-
-    // Simplified and corrected `handleUpdateProfile` in ManageProfileTourGuide.jsx
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
         setUpdateLoading(true);
@@ -75,14 +64,12 @@ const ManageProfileTourGuide = () => {
                 throw new Error("User email or API client is not available.");
             }
 
-            const updatesToFirebase = {}; // For Firebase displayName, photoURL
-            const updatesToUsersCollection = {}; // For backend /users/:email patch
-            const updatesToTourGuidesCollection = {}; // For backend /tour-guides/:email patch (experience, bio, potentially name/photoURL)
+            const updatesToFirebase = {}; 
+            const updatesToUsersCollection = {}; 
+            const updatesToTourGuidesCollection = {}; 
 
             let anyChangesDetected = false;
 
-            // Compare and prepare updates for Firebase and backend's usersCollection/tourGuidesCollection
-            // Name and Photo URL (can be updated in Firebase, usersCollection, and tourGuidesCollection)
             if (formData.name !== (user.displayName || user.name || guideExtraProfile?.name || '')) {
                 updatesToFirebase.displayName = formData.name;
                 updatesToUsersCollection.displayName = formData.name;
@@ -96,8 +83,7 @@ const ManageProfileTourGuide = () => {
                 anyChangesDetected = true;
             }
 
-            // Experience and Bio (specific to tourGuidesCollection)
-            // Only compare if guideExtraProfile was successfully loaded, otherwise just send the formData value
+
             if (guideExtraProfile) {
                 if (formData.experience !== guideExtraProfile.experience) {
                     updatesToTourGuidesCollection.experience = formData.experience;
@@ -108,8 +94,7 @@ const ManageProfileTourGuide = () => {
                     anyChangesDetected = true;
                 }
             } else {
-                // If guideExtraProfile wasn't loaded (e.g., it didn't exist before),
-                // and formData has values for experience/bio, include them.
+
                 if (formData.experience) {
                     updatesToTourGuidesCollection.experience = formData.experience;
                     anyChangesDetected = true;
@@ -131,22 +116,18 @@ const ManageProfileTourGuide = () => {
                 return;
             }
 
-            // Execute updates
-            // 1. Update Firebase (for immediate UI reflection of displayName/photoURL)
             if (Object.keys(updatesToFirebase).length > 0) {
                 await user.updateProfile(updatesToFirebase);
             }
 
-            // 2. Update usersCollection in backend
             if (Object.keys(updatesToUsersCollection).length > 0) {
                 await axiosSecure.patch(`/users/${user.email}`, updatesToUsersCollection);
             }
 
-            // 3. Update tourGuidesCollection in backend
             if (Object.keys(updatesToTourGuidesCollection).length > 0) {
-                // This is the primary PATCH for guide-specific data
+              
                 const response = await axiosSecure.patch(`/tour-guides/${user.email}`, updatesToTourGuidesCollection);
-                // Check response from tour-guides patch
+              
                 if (response.data.modifiedCount === 0 && response.data.message === "No changes made to the tour guide profile.") {
                     // It's possible that only Firebase/usersCollection was updated, or all changes were identical
                 } else if (response.data.modifiedCount === 0 && response.data.message !== "No changes made to the tour guide profile.") {
@@ -162,11 +143,9 @@ const ManageProfileTourGuide = () => {
             });
             setIsEditing(false);
 
-            // Re-fetch extra profile data to ensure UI is in sync with latest backend data
             if (user?.email && axiosSecure) {
                 const updatedProfileResponse = await axiosSecure.get(`/tour-guides/email/${user.email}`);
                 setGuideExtraProfile(updatedProfileResponse.data);
-                // Also re-set formData based on the newly fetched data
                 setFormData(prev => ({
                     ...prev,
                     name: updatedProfileResponse.data.name || user.displayName || user.name || '',
@@ -189,7 +168,7 @@ const ManageProfileTourGuide = () => {
     };
 
 
-    if (loading || extraProfileLoading) { // Check both AuthContext loading and extra profile data loading
+    if (loading || extraProfileLoading) { 
         return (
             <div className="flex justify-center items-center h-full">
                 <p className="text-xl font-medium">Loading tour guide profile...</p>
@@ -197,7 +176,6 @@ const ManageProfileTourGuide = () => {
         );
     }
 
-    // If AuthContext user is not available, or it's a guide but no profile found (and not loading)
     if (!user || user.role !== 'tour_guide') {
         return (
             <div className="text-center text-red-500 py-10">
@@ -207,7 +185,6 @@ const ManageProfileTourGuide = () => {
         );
     }
 
-    // Combine user data from AuthContext and extra guide data
     const currentProfile = {
         name: user.displayName || user.name || guideExtraProfile?.name || 'Not Set',
         email: user.email || 'Not Set',
@@ -231,7 +208,7 @@ const ManageProfileTourGuide = () => {
                         src={currentProfile.photoURL}
                         alt="Tour Guide Profile"
                         className="w-36 h-36 rounded-full object-cover border-4 border-[#FF9494] shadow-lg"
-                        onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/150'; }} // Fallback for broken image
+                        onError={(e) => { e.target.onerror = null; e.target.src = 'https://via.placeholder.com/150'; }} 
                     />
                 </div>
 
@@ -333,7 +310,7 @@ const ManageProfileTourGuide = () => {
                                 type="button"
                                 onClick={() => {
                                     setIsEditing(false);
-                                    // Reset form data to current profile data (from user and extra profile)
+
                                     setFormData({
                                         name: user.displayName || user.name || guideExtraProfile?.name || '',
                                         photoURL: user.photoURL || guideExtraProfile?.photoURL || '',

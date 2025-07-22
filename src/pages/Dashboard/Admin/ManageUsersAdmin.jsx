@@ -1,5 +1,3 @@
-
-
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
 import Swal from 'sweetalert2';
@@ -13,7 +11,7 @@ const ManageUsersAdmin = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const [isUpdatingRole, setIsUpdatingRole] = useState(false);
-    const [isDeletingUser, setIsDeletingUser] = useState(false); // New state for delete operation
+    const [isDeletingUser, setIsDeletingUser] = useState(false); 
 
     const fetchUsers = useCallback(async () => {
         setLoading(true);
@@ -44,7 +42,7 @@ const ManageUsersAdmin = () => {
     }, [fetchUsers]);
 
     const handleChangeRole = async (userId, newRole, userName, userEmail) => {
-        if (isUpdatingRole || isDeletingUser) return; // Prevent conflicts
+        if (isUpdatingRole || isDeletingUser) return; 
 
         const { isConfirmed } = await Swal.fire({
             title: `Change ${userName || userEmail}'s role to ${newRole}?`,
@@ -87,11 +85,9 @@ const ManageUsersAdmin = () => {
         }
     };
 
-    // New function to handle deleting a user
     const handleDeleteUser = async (userId, userName, userEmail) => {
-        if (isUpdatingRole || isDeletingUser) return; // Prevent conflicts
+        if (isUpdatingRole || isDeletingUser) return; 
 
-        // Prevent admin from deleting themselves
         if (user && user.email === userEmail) {
             Swal.fire({
                 icon: 'error',
@@ -115,7 +111,7 @@ const ManageUsersAdmin = () => {
             return;
         }
 
-        setIsDeletingUser(true); // Set deleting state
+        setIsDeletingUser(true); 
 
         try {
             const response = await axiosSecure.delete(`/users/${userId}`);
@@ -126,7 +122,7 @@ const ManageUsersAdmin = () => {
                     title: 'User Deleted!',
                     text: `${userName || userEmail} has been successfully deleted.`,
                 });
-                fetchUsers(); // Re-fetch users to update the UI
+                fetchUsers(); 
             } else {
                 throw new Error(response.data?.message || 'Failed to delete user.');
             }
@@ -138,7 +134,7 @@ const ManageUsersAdmin = () => {
                 text: err.response?.data?.message || 'An error occurred while deleting the user.',
             });
         } finally {
-            setIsDeletingUser(false); // Reset deleting state
+            setIsDeletingUser(false); 
         }
     };
 
@@ -175,7 +171,7 @@ const ManageUsersAdmin = () => {
                                     {userItem.role || 'tourist'}
                                 </td>
                                 <td className="py-4 px-6 whitespace-nowrap text-sm">
-                                    {userItem.role !== 'admin' && ( // Don't allow changing admin's role
+                                    {userItem.role !== 'admin' && ( 
                                         <>
                                             <button
                                                 onClick={() => handleChangeRole(userItem._id, 'tour_guide', userItem.displayName || userItem.name, userItem.email)}
@@ -193,16 +189,16 @@ const ManageUsersAdmin = () => {
                                             </button>
                                         </>
                                     )}
-                                    {userItem.role === 'admin' && ( // Show message if it's an admin
+                                    {userItem.role === 'admin' && ( 
                                         <span className="text-gray-500 italic text-xs">Admin role fixed</span>
                                     )}
 
                                     {/* Delete Button */}
-                                    {userItem.email !== user?.email && ( // Prevent admin from deleting themselves
+                                    {userItem.email !== user?.email && ( 
                                         <button
                                             onClick={() => handleDeleteUser(userItem._id, userItem.displayName || userItem.name, userItem.email)}
                                             className="ml-2 px-3 py-1 rounded-md bg-red-500 text-white font-semibold text-xs hover:bg-red-600 transition-colors duration-200"
-                                            disabled={isDeletingUser || isUpdatingRole} // Disable during any operation
+                                            disabled={isDeletingUser || isUpdatingRole} 
                                         >
                                             Delete
                                         </button>
