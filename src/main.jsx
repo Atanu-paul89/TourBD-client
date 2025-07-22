@@ -4,7 +4,7 @@ import {
   createBrowserRouter,
   RouterProvider,
   Outlet
-} from "react-router"; // <--- CHANGE: Ensure this is react-router-dom
+} from "react-router"; 
 import App from './App.jsx';
 import './index.css';
 
@@ -23,8 +23,6 @@ import {
 } from '@tanstack/react-query';
 import PackageDetails from './pages/PackageDetails.jsx';
 import TourGuideProfile from './pages/TourGuideProfile.jsx';
-
-// Import the new GlobalLayoutWrapper component
 import GlobalLayoutWrapper from './components/GlobalLayoutWrapper.jsx';
 import PrivateRoute from './routes/PrivateRoutes.jsx';
 import { Toaster } from 'react-hot-toast';
@@ -45,13 +43,12 @@ import ManageBookings from './pages/Dashboard/Admin/ManageBookings.jsx';
 import ForgotPassword from './pages/Auth/ForgotPassword.jsx';
 
 
-// Create a client for Tanstack Query
 const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />, // App component provides the overall layout (Navbar, Footer etc.)
+    element: <App />, 
     errorElement: <ErrorPage />,
     children: [
       {
@@ -83,7 +80,7 @@ const router = createBrowserRouter([
           },
         ]
       },
-      // Routes that might not need the global layout wrapper, like auth pages
+
       {
         path: "/login",
         element: <Login />,
@@ -96,16 +93,14 @@ const router = createBrowserRouter([
         path: "/register",
         element: <Register />,
       },
-      // You can add dashboard routes here if they don't need the global wrapper
-      // or wrap them in another GlobalLayoutWrapper if they do.
+
     ],
   },
-  // Dashboard route wrapped by PrivateRoute
+
   {
     path: "/dashboard",
     element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
     children: [
-      // Tourist Routes
       {
         path: "tourist/profile",
         element: <ManageProfileTourist />,
@@ -130,8 +125,6 @@ const router = createBrowserRouter([
         path: "tourist/join-as-guide",
         element: <JoinAsTourGuide />,
       },
-
-      // Tour Guide Routes
       {
         path: "tour-guide/profile",
         element: <ManageProfileTourGuide />,
@@ -140,8 +133,6 @@ const router = createBrowserRouter([
         path: "tour-guide/my-assigned-tours",
         element: <MyAssignedTours />,
       },
-
-      // Admin Routes
       {
         path: "admin/profile",
         element: <ManageProfileAdmin />,
