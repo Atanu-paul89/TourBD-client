@@ -47,10 +47,8 @@ const Navbar = () => {
     });
   };
 
-  // Close menus if clicked outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      // Handle desktop dropdown
       if (desktopDropdownRef.current && !desktopDropdownRef.current.contains(event.target)) {
         setDesktopDropdownOpen(false);
       }
@@ -63,7 +61,7 @@ const Navbar = () => {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []); // Depend on nothing as refs are stable
+  }, []); 
 
   const navItems = (
     <>
@@ -92,15 +90,15 @@ const Navbar = () => {
           {navItems}
         </ul>
 
-        {/* Right Section: Desktop User Profile/Login OR Mobile Hamburger/Login */}
+        {/* Right Section: Desktop User Profile/Login and Mobile Hamburger/Login */}
         <div className="flex items-center space-x-4">
           {/* Desktop User Profile/Login (hidden on mobile) */}
-          <div className="hidden md:flex items-center relative" ref={desktopDropdownRef}> {/* Ref on the container */}
+          <div className="hidden md:flex items-center relative" ref={desktopDropdownRef}> 
             {user ? (
               <div className="flex items-center gap-4">
                 <span className="text-gray-700 font-medium hidden sm:block">{user.displayName || user.email}</span>
                 <button
-                  onClick={() => setDesktopDropdownOpen(!desktopDropdownOpen)} // Control desktop dropdown state
+                  onClick={() => setDesktopDropdownOpen(!desktopDropdownOpen)} 
                   className="focus:outline-none rounded-full overflow-hidden border-2 border-[#FF9494] transition-all duration-300 transform hover:scale-105"
                 >
                   <img
@@ -109,8 +107,8 @@ const Navbar = () => {
                     className="w-10 h-10 object-cover rounded-full"
                   />
                 </button>
-                {/* Desktop User Dropdown Menu */}
-                {desktopDropdownOpen && ( // Controlled by desktopDropdownOpen state
+          
+                {desktopDropdownOpen && ( 
                   <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
                     <div className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
                       <p className="font-semibold">{user.displayName || 'User'}</p>
@@ -156,11 +154,11 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu Content (always present but toggled by mobileMenuOpen) */}
+
       {mobileMenuOpen && (
         <div ref={mobileMenuRef} className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg py-2 z-40">
           <ul className="flex flex-col items-center space-y-3 text-lg">
-            {/* User Info & Avatar (only if logged in, for mobile menu) */}
+
             {user && (
               <li className="mb-4 text-center border-b pb-2 w-full">
                 <img
@@ -174,7 +172,6 @@ const Navbar = () => {
             )}
             {navItems}
 
-            {/* Conditional Auth Links for Mobile */}
             {user ? (
               <>
                 <li><Link to="/dashboard" className="text-gray-700 hover:text-[#FF9494]" onClick={() => setMobileMenuOpen(false)}>Dashboard</Link></li>

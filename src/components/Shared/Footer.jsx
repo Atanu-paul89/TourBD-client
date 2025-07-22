@@ -12,13 +12,13 @@ const Footer = () => {
         </Link>
         <p className='font-semibold'>Follow US</p>
         <div className="grid grid-flow-col gap-4">
-          <a href="https://facebook.com/yourprofile" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 ">
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-700 ">
             <FaFacebook className="text-2xl" />
           </a>
-          <a href="https://twitter.com/yourprofile" target="_blank" rel="noopener noreferrer" className="text-[#1C96E8] hover:text-blue-500">
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-[#1C96E8] hover:text-blue-500">
             <FaTwitter className="text-2xl" />
           </a>
-          <a href="https://linkedin.com/in/yourprofile" target="_blank" rel="noopener noreferrer" className="text-[#0A66C2] hover:text-blue-600">
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-[#0A66C2] hover:text-blue-600">
             <FaLinkedin className="text-2xl" />
           </a>
         </div>
