@@ -1,6 +1,6 @@
-// src/hooks/useTourGuides.js
+
 import { useQuery } from '@tanstack/react-query';
-import useAxiosSecure from './useAxiosSecure'; // Your custom axios secure hook
+import useAxiosSecure from './useAxiosSecure'; 
 
 const useTourGuides = () => {
     const axiosSecure = useAxiosSecure();
@@ -8,10 +8,10 @@ const useTourGuides = () => {
     const { data: tourGuides = [], isLoading, error, refetch } = useQuery({
         queryKey: ['tourGuides'],
         queryFn: async () => {
-            const res = await axiosSecure.get('/tour-guides'); // Assuming this endpoint exists or you'll create it
+            const res = await axiosSecure.get('/tour-guides'); 
             return res.data;
         },
-        // Optionally, add staleTime, cacheTime, etc.
+
     });
 
     return { tourGuides, isLoading, error, refetch };
