@@ -1,5 +1,5 @@
 import React, { useContext, useEffect } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router'; // Changed from 'react-router' to 'react-router-dom'
+import { Outlet, NavLink, useNavigate } from 'react-router'; 
 import {
   FaUser, FaClipboardList, FaHeart, FaPlusSquare, FaBookOpen,
   FaUsers, FaBoxes, FaUserTie, FaPenNib, FaChalkboardTeacher,
@@ -8,7 +8,7 @@ import {
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content';
 
-import { FadeLoader } from 'react-spinners'; // <--- ADD THIS IMPORT
+import { FadeLoader } from 'react-spinners'; 
 import { AuthContext } from '../../providers/AuthContext';
 
 const MySwal = withReactContent(Swal);
@@ -17,14 +17,12 @@ const DashboardLayout = () => {
   const { user, loading } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  // Determine user role
-  const userRole = user?.role; // e.g., 'tourist', 'tour_guide', 'admin'
+  const userRole = user?.role; 
 
   useEffect(() => {
-    // ... (rest of your useEffect logic remains the same) ...
+
     if (!loading && !user) {
-      // If not logged in, PrivateRoute should already handle this.
-      // This is a fallback, though PrivateRoute should prevent reaching here.
+
       navigate('/login', { replace: true });
     } else if (!loading && user && window.location.pathname === '/dashboard') {
       let redirectTo = '/';
@@ -40,9 +38,8 @@ const DashboardLayout = () => {
           break;
         default:
           console.warn('Unknown user role or role not yet loaded:', userRole);
-          // If user role is null/undefined after loading, redirect to home or login as a safe fallback
-          redirectTo = '/login'; // Or '/'
-          // Optionally show a SweetAlert for unknown role
+
+          redirectTo = '/login'; 
           MySwal.fire({
             icon: 'error',
             title: 'Access Denied',
@@ -67,23 +64,19 @@ const DashboardLayout = () => {
   }
 
   if (!user) {
-    // If loading is false and user is null, it means PrivateRoute didn't block it,
-    // or the session expired. Navigate to login.
-    // This is a safety check; PrivateRoute should ideally catch this.
-    // navigate('/login', { replace: true }); // Avoid double-redirect
-    return null; // PrivateRoute will handle the redirect.
+    return null; 
   }
 
-  // ... (rest of the DashboardLayout component) ...
+
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#FFF5E4]">
-      {/* Dashboard Sidebar */}
+    
       <div className="w-full md:w-64 bg-[#FF9494] text-white p-6 md:p-8 flex flex-col items-center md:items-start shadow-lg">
         <h2 className="text-3xl font-bold mb-8 text-center md:text-left">
           {userRole ? `${userRole.charAt(0).toUpperCase() + userRole.slice(1)} Dashboard` : 'Dashboard'}
         </h2>
         <nav className="space-y-4 w-full">
-          {/* ... (Your role-based NavLinks as before) ... */}
+        
           {userRole === 'tourist' && (
             <>
               {/* Tourist Links */}
@@ -168,7 +161,7 @@ const DashboardLayout = () => {
 
       {/* Dashboard Content */}
       <div className="flex-1 p-6 md:p-10">
-        <Outlet /> {/* This is where the specific dashboard pages will render */}
+        <Outlet /> 
       </div>
     </div>
   );

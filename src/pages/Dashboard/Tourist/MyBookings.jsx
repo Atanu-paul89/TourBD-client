@@ -10,14 +10,12 @@ const MyBookings = () => {
     const { user, loading } = useContext(AuthContext);
     const queryClient = useQueryClient();
 
-    // Fetch bookings data
     const { data: bookings = [], isLoading, isError, error } = useQuery({
         queryKey: ['myBookings', user?.email],
         queryFn: async () => {
             if (!user?.email) {
                 return [];
             }
-            // Use the token to authorize the request
             const token = localStorage.getItem('access-token');
             const res = await axios.get(`http://localhost:5000/bookings`, {
                 headers: {
@@ -29,7 +27,6 @@ const MyBookings = () => {
         enabled: !!user?.email && !loading,
     });
 
-    // Mutation for cancelling a booking
     const cancelBookingMutation = useMutation({
         mutationFn: async (bookingId) => {
             const token = localStorage.getItem('access-token');
@@ -107,7 +104,7 @@ const MyBookings = () => {
                 <h2 className="text-3xl font-bold text-[#FF5F7F] mb-6">My Bookings</h2>
                 <p className="text-gray-700">You haven't booked any tours yet.</p>
                 <p className="text-gray-500 mt-2">Explore our amazing trips and book your next adventure!</p>
-                {/* You might want to add a link to the trips page here */}
+               
             </div>
         );
     }
@@ -119,8 +116,8 @@ const MyBookings = () => {
                 Here you can view and manage all your booked tour packages.
             </p>
 
-            {/* The main table container, hidden on small screens */}
-            <div className="overflow-x-auto hidden sm:block"> {/* Only show table on sm and larger screens */}
+         
+            <div className="overflow-x-auto hidden sm:block"> 
                 <table className="min-w-full bg-white border border-gray-200 rounded-lg">
                     <thead>
                         <tr className="bg-[#FF9494] text-white">
@@ -170,8 +167,8 @@ const MyBookings = () => {
                 </table>
             </div>
 
-            {/* Mobile / Small screen specific display */}
-            <div className="sm:hidden space-y-4"> {/* Only show this section on screens smaller than 'sm' */}
+     
+            <div className="sm:hidden space-y-4"> 
                 {bookings.map((booking) => (
                     <div key={booking._id} className="bg-gray-50 p-4 rounded-lg shadow-sm border border-gray-200">
                         <div className="flex justify-between items-center mb-2">
