@@ -2,62 +2,50 @@
 import React, { useContext, useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
-import useAxiosSecure from '../../../hooks/useAxiosSecure'; // Adjust path as needed
-import { AuthContext } from '../../../providers/AuthContext'; // Adjust path as needed
-import { useQuery } from '@tanstack/react-query'; // Import useQuery
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; // Import QueryClient and QueryClientProvider
+import useAxiosSecure from '../../../hooks/useAxiosSecure'; 
+import { AuthContext } from '../../../providers/AuthContext'; 
+import { useQuery } from '@tanstack/react-query'; 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'; 
 
-// Create a query client instance (if not already done at a higher level)
-// This is typically done in your App.jsx or main.jsx
 const queryClient = new QueryClient();
 
-// A list of relevant destinations (you can expand this)
 const preferredDestinationsOptions = [
     'Cox\'s Bazar', 'Saint Martin\'s Island', 'Sundarbans', 'Sreemangal',
     'Bandarban', 'Sylhet', 'Dhaka', 'Chittagong Hill Tracts',
     'Rangamati', 'Kuakata', 'Paharpur', 'Mahasthangarh'
 ];
 
-const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and allow QueryClientProvider
-    const { user, loading: authLoading } = useContext(AuthContext); // Get current user from AuthContext, and authLoading
+const JoinAsTourGuideContent = () => { 
+    const { user, loading: authLoading } = useContext(AuthContext); 
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, reset, watch, formState: { errors } } = useForm();
     const [hasNoPortfolio, setHasNoPortfolio] = useState(false);
 
-    // Watch for changes in the 'portfolioWebsite' field or checkbox
     const portfolioWebsiteValue = watch('portfolioWebsite');
 
-    // Query to check for existing pending/approved applications for this user
     const { data: existingApplication, isLoading: checkingApplication, isError: applicationCheckError, refetch } = useQuery({
         queryKey: ['myGuideApplication', user?.email],
         queryFn: async () => {
             if (!user?.email) {
-                // Important: Return a non-undefined value or throw an error
-                // when user.email is not available. Returning null is a common pattern.
                 return null;
             }
             try {
-                // Fetch applications for the current user
                 const res = await axiosSecure.get(`/guide-applications/user/${user.email}`);
-                // Filter to find pending or approved applications
                 const pendingOrApproved = res.data.find(app => app.status === 'pending' || app.status === 'approved');
-                return pendingOrApproved || null; // Return null if no application is found
+                return pendingOrApproved || null; 
             } catch (error) {
                 console.error("Error fetching existing guide application:", error);
-                throw new Error("Failed to fetch existing application status."); // Propagate error
+                throw new Error("Failed to fetch existing application status.");
             }
         },
-        enabled: !!user?.email && !authLoading, // Only enable if user email is available and auth is not loading
-        staleTime: 5 * 60 * 1000, // Data considered fresh for 5 minutes
-        cacheTime: 10 * 60 * 1000, // Cache for 10 minutes
-        retry: 1, // Retry once on failure
+        enabled: !!user?.email && !authLoading, 
+        staleTime: 5 * 60 * 1000, 
+        cacheTime: 10 * 60 * 1000, 
+        retry: 1,
     });
 
     useEffect(() => {
         if (existingApplication) {
-            // Pre-fill form if an application exists and it's not rejected
-            // This ensures fields are populated if they are meant to be displayed
-            // even if disabled.
             if (existingApplication.status !== 'rejected') {
                 reset(existingApplication);
                 setHasNoPortfolio(existingApplication.portfolioWebsite === "N/A");
@@ -67,19 +55,19 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
 
 
     const onSubmit = async (data) => {
-        // Ensure email and name are taken from the authenticated user
+
         const applicationData = {
-            applicantName: user?.displayName || data.name, // Use user's display name if available
-            applicantEmail: user?.email, // Crucial: use authenticated user's email
+            applicantName: user?.displayName || data.name, 
+            applicantEmail: user?.email, 
             phone: data.phone,
-            experienceDuration: parseFloat(data.experienceDuration), // Convert to number
+            experienceDuration: parseFloat(data.experienceDuration),
             preferredDestinations: data.preferredDestinations,
             bio: data.bio,
             imageUrl: data.imageUrl,
             cvUrl: data.cvUrl,
-            portfolioWebsite: hasNoPortfolio ? "N/A" : data.portfolioWebsite, // Handle "N/A" for no portfolio
-            status: 'pending', // Initial status
-            appliedAt: new Date(), // Timestamp of application
+            portfolioWebsite: hasNoPortfolio ? "N/A" : data.portfolioWebsite, 
+            status: 'pending', 
+            appliedAt: new Date(), 
         };
 
         try {
@@ -93,9 +81,9 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                            You will receive an email about the result, and your dashboard will be updated.`,
                     confirmButtonText: 'Okay, Got It!'
                 });
-                reset(); // Clear form fields
+                reset(); 
                 setHasNoPortfolio(false);
-                refetch(); // Re-fetch application status to update UI immediately
+                refetch(); 
             } else {
                 Swal.fire({
                     icon: 'error',
@@ -114,19 +102,18 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
         }
     };
 
-    if (authLoading) { // Added check for auth loading
+    if (authLoading) { 
         return <div className="text-center py-8 text-lg font-medium">Loading user data...</div>;
     }
 
-    if (checkingApplication) { // Image_d70049.png
+    if (checkingApplication) { 
         return <div className="text-center py-8 text-lg font-medium">Checking application status...</div>;
     }
 
-    if (applicationCheckError) { // This is where the error "Error checking application status." might come from
+    if (applicationCheckError) { 
         return <div className="text-center py-8 text-xl font-bold text-red-600">Error checking application status.</div>;
     }
 
-    // Determine if the form should be disabled
     const isFormDisabled = existingApplication && (existingApplication.status === 'pending' || existingApplication.status === 'approved');
     const isRejected = existingApplication && existingApplication.status === 'rejected';
 
@@ -178,11 +165,10 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                     </p>
                     <button
                         onClick={() => {
-                            // Clear existing application data to re-enable the form
-                            // This works by invalidating the query and letting it refetch (which will be null if rejected)
+
                             queryClient.invalidateQueries(['myGuideApplication', user?.email]);
-                            reset(); // Also reset the form fields
-                            setHasNoPortfolio(false); // Reset portfolio checkbox
+                            reset(); 
+                            setHasNoPortfolio(false);
                         }}
                         className="mt-4 px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
                     >
@@ -191,21 +177,20 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                 </div>
             ) : (
                 <form onSubmit={handleSubmit(onSubmit)} className="max-w-2xl mx-auto bg-white p-6 sm:p-8 rounded-lg shadow-md space-y-4">
-                    {/* Name (pre-filled from user context if available, otherwise input) */}
+
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">Full Name</label>
                         <input
                             type="text"
                             id="name"
                             defaultValue={user?.displayName || ''}
-                            readOnly={!!user?.displayName} // Make read-only if display name exists
+                            readOnly={!!user?.displayName} 
                             {...register('name', { required: !user?.displayName && 'Full Name is required' })}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                         {errors.name && <p className="text-red-500 text-xs italic">{errors.name.message}</p>}
                     </div>
 
-                    {/* Email (pre-filled from user context, read-only) */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="email">Email</label>
                         <input
@@ -219,7 +204,6 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                         {errors.email && <p className="text-red-500 text-xs italic">{errors.email.message}</p>}
                     </div>
 
-                    {/* Phone Number */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="phone">Phone Number</label>
                         <input
@@ -228,7 +212,7 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                             {...register('phone', {
                                 required: 'Phone Number is required',
                                 pattern: {
-                                    value: /^[0-9]{10,15}$/, // Basic phone number regex
+                                    value: /^[0-9]{10,15}$/, 
                                     message: 'Invalid phone number format'
                                 }
                             })}
@@ -237,25 +221,24 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                         {errors.phone && <p className="text-red-500 text-xs italic">{errors.phone.message}</p>}
                     </div>
 
-                    {/* Experience Duration */}
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="experienceDuration">Experience Duration (in years, put 0 for fresher)</label>
                         <input
                             type="number"
                             id="experienceDuration"
-                            step="0.5" // Allow half years
+                            step="0.5"
                             min="0"
                             {...register('experienceDuration', {
                                 required: 'Experience Duration is required',
                                 min: { value: 0, message: 'Experience cannot be negative' },
-                                valueAsNumber: true, // Converts input to number
+                                valueAsNumber: true,
                             })}
                             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         />
                         {errors.experienceDuration && <p className="text-red-500 text-xs italic">{errors.experienceDuration.message}</p>}
                     </div>
 
-                    {/* Preferred Destinations (Multi-select) */}
+
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="preferredDestinations">Preferred Destinations (Select all that apply)</label>
                         <select
@@ -272,7 +255,7 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                         <p className="text-gray-500 text-xs mt-1">Hold Ctrl/Cmd to select multiple options.</p>
                     </div>
 
-                    {/* Brief Bio */}
+
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="bio">Brief Bio</label>
                         <textarea
@@ -284,7 +267,7 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                         {errors.bio && <p className="text-red-500 text-xs italic">{errors.bio.message}</p>}
                     </div>
 
-                    {/* Image Upload (URL) */}
+
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="imageUrl">Profile Image URL</label>
                         <input
@@ -302,7 +285,7 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                         {errors.imageUrl && <p className="text-red-500 text-xs italic">{errors.imageUrl.message}</p>}
                     </div>
 
-                    {/* CV Upload (URL) */}
+
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="cvUrl">CV / Resume URL</label>
                         <input
@@ -320,7 +303,7 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                         {errors.cvUrl && <p className="text-red-500 text-xs italic">{errors.cvUrl.message}</p>}
                     </div>
 
-                    {/* Portfolio Website */}
+
                     <div>
                         <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="portfolioWebsite">Portfolio Website URL</label>
                         <input
@@ -345,7 +328,7 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
                                 onChange={(e) => {
                                     setHasNoPortfolio(e.target.checked);
                                     if (e.target.checked) {
-                                        reset({ ...watch(), portfolioWebsite: '' }); // Clear field when checked
+                                        reset({ ...watch(), portfolioWebsite: '' }); 
                                     }
                                 }}
                                 className="mr-2"
@@ -368,7 +351,7 @@ const JoinAsTourGuideContent = () => { // Renamed to avoid direct export and all
     );
 };
 
-// Wrapper component to provide QueryClientProvider
+
 const JoinAsTourGuide = () => {
     return (
         <QueryClientProvider client={queryClient}>

@@ -42,21 +42,18 @@ const ManageProfileTourist = () => {
         setUpdateLoading(true);
 
         const updates = {};
-        const backendUpdates = {}; // Data for backend update
+        const backendUpdates = {}; 
 
-        // Check for name change
         if (name !== user.displayName && name.trim() !== '') {
             updates.displayName = name;
             backendUpdates.displayName = name;
         }
 
-        // Check for photoURL change
         if (photo !== user.photoURL && photo.trim() !== '') {
             updates.photoURL = photo;
             backendUpdates.photoURL = photo;
         }
 
-        // Password change logic
         let passwordUpdated = false;
         if (newPassword.trim() !== '') {
             if (newPassword !== confirmPassword) {
@@ -78,9 +75,7 @@ const ManageProfileTourist = () => {
                 return;
             }
             try {
-                // Firebase updatePassword requires re-authentication if too much time has passed.
-                // For simplicity here, we assume the session is fresh enough.
-                // In a real app, you'd handle re-authentication if this fails.
+
                 await updatePassword(user, newPassword);
                 passwordUpdated = true;
                 console.log("Firebase password updated successfully!");
@@ -97,7 +92,6 @@ const ManageProfileTourist = () => {
         }
 
         let firebaseProfileUpdated = false;
-        // Update Firebase profile (displayName, photoURL)
         if (Object.keys(updates).length > 0) {
             try {
                 await userUpdateProfile(updates.displayName || user.displayName, updates.photoURL || user.photoURL);
@@ -116,7 +110,6 @@ const ManageProfileTourist = () => {
         }
 
         let backendProfileUpdated = false;
-        // Update backend MongoDB profile (displayName, photoURL) using axiosSecure
         if (Object.keys(backendUpdates).length > 0 && axiosSecure) {
             try {
                 const response = await axiosSecure.patch(`/users/${user.email}`, backendUpdates);
@@ -134,15 +127,14 @@ const ManageProfileTourist = () => {
             }
         }
 
-        // Show success message if at least one update occurred
         if (firebaseProfileUpdated || backendProfileUpdated || passwordUpdated) {
             Swal.fire({
                 icon: 'success',
                 title: 'Profile Updated!',
                 text: 'Your profile has been successfully updated.',
             });
-            setIsEditing(false); // Exit edit mode on success
-            setNewPassword(''); // Clear password fields
+            setIsEditing(false); 
+            setNewPassword(''); 
             setConfirmPassword('');
         } else {
             Swal.fire({
@@ -231,7 +223,7 @@ const ManageProfileTourist = () => {
 
                         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between p-3 bg-gray-50 rounded-lg">
                             <label htmlFor="email" className="font-semibold text-gray-700 w-1/3">Email:</label>
-                            {/* Email is typically not editable from client-side for Firebase users directly */}
+
                             <span className="text-gray-800 w-2/3 bg-gray-100 px-3 py-2 rounded-md">{user.email} (Not Editable)</span>
                         </div>
 
@@ -263,15 +255,15 @@ const ManageProfileTourist = () => {
                             <button
                                 type="submit"
                                 className="bg-[#FF5F7F] text-white px-6 py-3 rounded-lg font-semibold hover:bg-[#FF9494] transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-[#FF5F7F] focus:ring-opacity-50"
-                                disabled={updateLoading} // Disable button during update
+                                disabled={updateLoading} 
                             >
                                 {updateLoading ? 'Saving...' : 'Save Changes'}
                             </button>
                             <button
                                 type="button"
                                 onClick={() => {
-                                    setIsEditing(false); // Cancel edit mode
-                                    setName(user.displayName || ''); // Reset fields to current user data
+                                    setIsEditing(false); 
+                                    setName(user.displayName || ''); 
                                     setPhoto(user.photoURL || '');
                                     setNewPassword('');
                                     setConfirmPassword('');

@@ -8,31 +8,30 @@ import { AuthContext } from '../../../providers/AuthContext';
 
 
 const EditStoryTourist = () => {
-    const { id } = useParams(); // Get story ID from URL
+    const { id } = useParams(); 
     const navigate = useNavigate();
     const { user } = useContext(AuthContext);
     const axiosSecure = useAxiosSecure();
     const { register, handleSubmit, reset, formState: { errors } } = useForm();
 
-    // Fetch the specific story data to pre-fill the form
     const { data: story = {}, isLoading, isError } = useQuery({
         queryKey: ['storyToEdit', id],
         queryFn: async () => {
-            const res = await axiosSecure.get(`/stories/${id}`); // Assuming you have a GET /stories/:id endpoint
+            const res = await axiosSecure.get(`/stories/${id}`); 
             return res.data;
         },
-        enabled: !!id, // Only run if ID is available
-        // You might add staleTime/cacheTime here for better UX
+        enabled: !!id, 
+
     });
 
     useEffect(() => {
-        // Populate form fields when story data is loaded
+
         if (story && story._id) {
             reset({
                 title: story.title,
-                story: story.story, // Assuming 'story' is the field name for the content
+                story: story.story,
             });
-            // Optional: If you want to check if the current user is the author
+
             if (user?.email && story?.author?.email && user.email !== story.author.email) {
                 Swal.fire({
                     icon: 'error',
@@ -55,7 +54,7 @@ const EditStoryTourist = () => {
                     showConfirmButton: false,
                     timer: 1500
                 });
-                navigate('/dashboard/tourist/manage-stories'); // Redirect back to My Stories
+                navigate('/dashboard/tourist/manage-stories'); 
             } else {
                 Swal.fire({
                     icon: 'info',
