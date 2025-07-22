@@ -12,7 +12,7 @@ const axiosSecure = axios.create({
 });
 
 const useAxiosSecure = () => {
-    const { logoutUser } = useContext(AuthContext); // Get logout function from AuthContext
+    const { logout } = useContext(AuthContext); 
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,14 +36,16 @@ const useAxiosSecure = () => {
             // For 401 or 403 status codes, log out the user and redirect to login
             if (status === 401 || status === 403) {
                 console.log('Unauthorized or Forbidden access. Logging out...');
-                await logoutUser(); // Call your logout function
+                await logout(); // Call your logout function
                 navigate('/login'); // Redirect to login page
             }
             return Promise.reject(error);
         });
-    }, [logoutUser, navigate]); // Dependencies for useEffect
+    }, [logout, navigate]); 
 
     return axiosSecure;
 };
 
-export default useAxiosSecure;
+export default useAxiosSecure; 
+
+

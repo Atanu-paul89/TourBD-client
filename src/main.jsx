@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom/client';
 import {
   createBrowserRouter,
   RouterProvider,
-  Outlet 
+  Outlet
 } from "react-router"; // <--- CHANGE: Ensure this is react-router-dom
 import App from './App.jsx';
 import './index.css';
@@ -41,7 +41,9 @@ import ManageUsersAdmin from './pages/Dashboard/Admin/ManageUsersAdmin.jsx';
 import ManageCandidatesAdmin from './pages/Dashboard/Admin/ManageCandidatesAdmin.jsx';
 import AddPackageAdmin from './pages/Dashboard/Admin/AddPackageAdmin.jsx';
 import EditStoryTourist from './pages/Dashboard/Tourist/EditStoryTourist.jsx';
-import EditTouristProfile from './pages/Dashboard/Tourist/EditTouristProfile.jsx';
+import ManageBookings from './pages/Dashboard/Admin/ManageBookings.jsx';
+import ForgotPassword from './pages/Auth/ForgotPassword.jsx';
+
 
 // Create a client for Tanstack Query
 const queryClient = new QueryClient();
@@ -87,6 +89,10 @@ const router = createBrowserRouter([
         element: <Login />,
       },
       {
+        path: '/forgot-password', 
+        element: <ForgotPassword />,
+      },
+      {
         path: "/register",
         element: <Register />,
       },
@@ -97,7 +103,7 @@ const router = createBrowserRouter([
   // Dashboard route wrapped by PrivateRoute
   {
     path: "/dashboard",
-    element: <PrivateRoute><DashboardLayout /></PrivateRoute>, 
+    element: <PrivateRoute><DashboardLayout /></PrivateRoute>,
     children: [
       // Tourist Routes
       {
@@ -117,7 +123,7 @@ const router = createBrowserRouter([
         element: <ManageStoriesTourist />,
       },
       {
-        path: 'tourist/edit-story/:id', 
+        path: 'tourist/edit-story/:id',
         element: <EditStoryTourist />,
       },
       {
@@ -149,6 +155,10 @@ const router = createBrowserRouter([
         element: <ManageCandidatesAdmin />,
       },
       {
+        path: "admin/manage-bookings",
+        element: <ManageBookings />,
+      },
+      {
         path: "admin/add-package",
         element: <AddPackageAdmin />,
       },
@@ -161,6 +171,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
         <RouterProvider router={router} />
+        <Toaster></Toaster>
       </AuthProvider>
     </QueryClientProvider>
   </React.StrictMode>,

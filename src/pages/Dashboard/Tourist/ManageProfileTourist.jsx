@@ -1,18 +1,17 @@
 
-// src/components/ManageProfileTourist.jsx
 import React, { useContext, useState } from 'react';
 import { AuthContext } from '../../../providers/AuthContext';
-import { updatePassword } from 'firebase/auth'; // Import updatePassword from firebase/auth
-import Swal from 'sweetalert2'; // Assuming you have sweetalert2 for notifications
+import { updatePassword } from 'firebase/auth'; 
+import Swal from 'sweetalert2'; 
 
 const ManageProfileTourist = () => {
-    const { user, loading, userUpdateProfile, axiosSecure } = useContext(AuthContext); // Get userUpdateProfile and axiosSecure
+    const { user, loading, userUpdateProfile, axiosSecure } = useContext(AuthContext); 
     const [isEditing, setIsEditing] = useState(false);
     const [name, setName] = useState(user?.displayName || '');
     const [photo, setPhoto] = useState(user?.photoURL || '');
     const [newPassword, setNewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [updateLoading, setUpdateLoading] = useState(false); // Loading state for update process
+    const [updateLoading, setUpdateLoading] = useState(false); 
 
     React.useEffect(() => {
         if (user) {

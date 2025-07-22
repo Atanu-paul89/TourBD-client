@@ -23,37 +23,37 @@ const DashboardLayout = () => {
   useEffect(() => {
     // ... (rest of your useEffect logic remains the same) ...
     if (!loading && !user) {
-        // If not logged in, PrivateRoute should already handle this.
-        // This is a fallback, though PrivateRoute should prevent reaching here.
-        navigate('/login', { replace: true });
+      // If not logged in, PrivateRoute should already handle this.
+      // This is a fallback, though PrivateRoute should prevent reaching here.
+      navigate('/login', { replace: true });
     } else if (!loading && user && window.location.pathname === '/dashboard') {
-        let redirectTo = '/';
-        switch (userRole) {
-            case 'tourist':
-                redirectTo = '/dashboard/tourist/profile';
-                break;
-            case 'tour_guide':
-                redirectTo = '/dashboard/tour-guide/my-assigned-tours';
-                break;
-            case 'admin':
-                redirectTo = '/dashboard/admin/manage-users';
-                break;
-            default:
-                console.warn('Unknown user role or role not yet loaded:', userRole);
-                // If user role is null/undefined after loading, redirect to home or login as a safe fallback
-                redirectTo = '/login'; // Or '/'
-                // Optionally show a SweetAlert for unknown role
-                MySwal.fire({
-                  icon: 'error',
-                  title: 'Access Denied',
-                  text: 'Your user role could not be determined. Please log in again.',
-                  confirmButtonColor: '#FF9494'
-                });
-                break;
-        }
-        if (window.location.pathname !== redirectTo) {
-            navigate(redirectTo, { replace: true });
-        }
+      let redirectTo = '/';
+      switch (userRole) {
+        case 'tourist':
+          redirectTo = '/dashboard/tourist/profile';
+          break;
+        case 'tour_guide':
+          redirectTo = '/dashboard/tour-guide/my-assigned-tours';
+          break;
+        case 'admin':
+          redirectTo = '/dashboard/admin/manage-users';
+          break;
+        default:
+          console.warn('Unknown user role or role not yet loaded:', userRole);
+          // If user role is null/undefined after loading, redirect to home or login as a safe fallback
+          redirectTo = '/login'; // Or '/'
+          // Optionally show a SweetAlert for unknown role
+          MySwal.fire({
+            icon: 'error',
+            title: 'Access Denied',
+            text: 'Your user role could not be determined. Please log in again.',
+            confirmButtonColor: '#FF9494'
+          });
+          break;
+      }
+      if (window.location.pathname !== redirectTo) {
+        navigate(redirectTo, { replace: true });
+      }
     }
   }, [user, loading, navigate, userRole]);
 
@@ -112,7 +112,7 @@ const DashboardLayout = () => {
                 <span className="text-lg">Back to Home</span>
               </NavLink>
 
-           
+
             </>
           )}
 
@@ -126,6 +126,10 @@ const DashboardLayout = () => {
               <NavLink to="/dashboard/tour-guide/my-assigned-tours" className={({ isActive }) => `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${isActive ? 'bg-[#FF5F7F] font-semibold text-white' : 'hover:bg-[#FF5F7F] hover:text-white'}`}>
                 <FaClipboardList className="text-xl" />
                 <span className="text-lg">Assigned Tours</span>
+              </NavLink>
+              <NavLink to="/" className={({ isActive }) => `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${isActive ? 'bg-[#FF5F7F] font-semibold text-white' : 'hover:bg-[#FF5F7F] hover:text-white'}`}>
+                <FaHome className="text-xl" />
+                <span className="text-lg">Back to Home</span>
               </NavLink>
             </>
           )}
@@ -145,9 +149,17 @@ const DashboardLayout = () => {
                 <FaUserTie className="text-xl" />
                 <span className="text-lg">Manage Candidates</span>
               </NavLink>
+              <NavLink to="/dashboard/admin/manage-bookings" className={({ isActive }) => `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${isActive ? 'bg-[#FF5F7F] font-semibold text-white' : 'hover:bg-[#FF5F7F] hover:text-white'}`}>
+                <FaUserTie className="text-xl" />
+                <span className="text-lg">Manage Bookings</span>
+              </NavLink>
               <NavLink to="/dashboard/admin/add-package" className={({ isActive }) => `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${isActive ? 'bg-[#FF5F7F] font-semibold text-white' : 'hover:bg-[#FF5F7F] hover:text-white'}`}>
                 <FaBoxes className="text-xl" />
                 <span className="text-lg">Add Package</span>
+              </NavLink>
+              <NavLink to="/" className={({ isActive }) => `flex items-center gap-3 p-3 rounded-lg transition-colors duration-200 ${isActive ? 'bg-[#FF5F7F] font-semibold text-white' : 'hover:bg-[#FF5F7F] hover:text-white'}`}>
+                <FaHome className="text-xl" />
+                <span className="text-lg">Back to Home</span>
               </NavLink>
             </>
           )}

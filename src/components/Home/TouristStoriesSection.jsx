@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router';
 
 const TouristStoriesSection = () => {
   const touristStories = [
@@ -49,9 +50,9 @@ const TouristStoriesSection = () => {
         </div>
         <div className="mt-12">
             {/* Using direct hex code for button background #FF9494 */}
-            <a href="#" className="btn bg-[#FF9494] text-white border-none hover:bg-[#E07B7B] text-lg px-8 py-3 rounded-full shadow-lg">
+            <Link to="/dashboard/tourist/add-story" className="btn bg-[#FF9494] text-white border-none hover:bg-[#E07B7B] text-lg px-8 py-3 rounded-full shadow-lg">
                 Share Your Story
-            </a>
+            </Link>
         </div>
       </div>
     </section>

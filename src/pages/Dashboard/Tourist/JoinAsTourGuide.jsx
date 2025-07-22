@@ -378,3 +378,4 @@ const JoinAsTourGuide = () => {
 };
 
 export default JoinAsTourGuide;
+

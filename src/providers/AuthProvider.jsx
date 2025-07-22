@@ -15,12 +15,12 @@ import { auth } from '../utils/firebase';
 import axios from 'axios';
 
 
-
 const googleProvider = new GoogleAuthProvider();
 
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+
 
   // 1. Create User with Email and Password
   const createUser = (email, password) => {
@@ -117,9 +117,6 @@ const AuthProvider = ({ children }) => {
   }, []);
 
 
-
-
-
   const authInfo = {
     user,
     loading,
@@ -129,7 +126,6 @@ const AuthProvider = ({ children }) => {
     userUpdateProfile,
     resetPassword,
     logOut,
-    
   };
 
   return (

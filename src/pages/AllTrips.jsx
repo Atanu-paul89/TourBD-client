@@ -1,73 +1,16 @@
 
-
-// import React from 'react';
-// import { useQuery } from '@tanstack/react-query';
-// import axios from 'axios';
-// import { Link } from 'react-router'; // For redirecting to Package Details
-
-// const AllTrips = () => {
-//   const { data: packages, isLoading, isError, error } = useQuery({
-//     queryKey: ['allPackages'], // Unique key for this query
-//     queryFn: async () => {
-//       const response = await axios.get('http://localhost:5000/packages'); // Adjust your backend URL if different
-//       return response.data;
-//     }
-//   });
-
-//   if (isLoading) {
-//     return <div className="text-center py-8">Loading packages...</div>;
-//   }
-
-//   if (isError) {
-//     return <div className="text-center py-8 text-red-500">Error: {error.message}</div>;
-//   }
-
-//   return (
-//     <div className="container mx-auto px-4 py-8">
-//       <h1 className="text-4xl font-bold text-center mb-8">All Available Trips</h1>
-//       <p className="text-center text-lg mb-12">Explore all our exciting tour packages.</p>
-
-//       {packages.length === 0 ? (
-//         <div className="text-center text-xl text-gray-600">No packages available yet.</div>
-//       ) : (
-//         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-//           {packages.map((pkg) => (
-//             <div key={pkg._id} className="bg-white rounded-lg shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-//               <img src={pkg.image} alt={pkg.tripTitle} className="w-full h-48 object-cover" />
-//               <div className="p-6">
-//                 <h2 className="text-2xl font-semibold text-gray-800 mb-2">{pkg.tripTitle}</h2>
-//                 <p className="text-gray-600 mb-2">
-//                   <span className="font-medium">Tour Type:</span> {pkg.tourType}
-//                 </p>
-//                 <p className="text-gray-700 text-xl font-bold mb-4">${pkg.price}</p>
-//                 <Link to={`/packages/${pkg._id}`} className="block w-full bg-pink-500 text-white py-3 px-4 rounded-md text-center hover:bg-pink-600 transition duration-300">
-//                   View Details
-//                 </Link>
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default AllTrips;
-
-
-
-// src/pages/AllTrips.jsx
-
-import React from 'react';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios'; // Make sure you have axios installed: npm install axios
+import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query'; 
+import axios from 'axios';
 import { Link } from 'react-router';
+import { motion } from 'framer-motion'; 
 
 const AllTrips = () => {
-  const { data: packages, isLoading, isError, error } = useQuery({
-    queryKey: ['allPackages'], // Unique key for this query
+  const [sortOrder, setSortOrder] = useState(null); 
+
+  const { data: packages, isLoading, isError, error } = useQuery({ 
+    queryKey: ['allPackages'],
     queryFn: async () => {
-      // ** IMPORTANT: Adjust your backend URL if it's different from localhost:5000 **
       const response = await axios.get('http://localhost:5000/packages');
       return response.data;
     }
@@ -81,6 +24,40 @@ const AllTrips = () => {
     return <div className="text-center py-8 text-red-600 text-xl font-bold">Error: {error.message}</div>;
   }
 
+  // Create a mutable copy of packages for sorting
+  const sortedPackages = packages ? [...packages].sort((a, b) => {
+    if (sortOrder === 'asc') {
+      return a.price - b.price; // Sort low to high
+    } else if (sortOrder === 'desc') {
+      return b.price - a.price; // Sort high to low
+    }
+    return 0; // No sorting if sortOrder is null
+  }) : [];
+
+  // Framer Motion variants for staggered animation of cards
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1 // Stagger each child by 0.1 seconds
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        type: "spring",
+        stiffness: 100,
+        damping: 10
+      }
+    }
+  };
+
   return (
     <div className="container mx-auto px-4 py-12">
       <h1 className="text-4xl md:text-5xl font-extrabold text-[#FF9494] text-center mb-6">
@@ -91,16 +68,50 @@ const AllTrips = () => {
         From cultural explorations to thrilling escapades, we have something for everyone.
       </p>
 
-      {packages.length === 0 ? (
+      {/* Sorting Controls */}
+      <div className="flex justify-center gap-4 mb-8">
+        <button
+          onClick={() => setSortOrder('asc')}
+          className={`px-6 py-3 rounded-md font-semibold transition duration-300
+            ${sortOrder === 'asc' ? 'bg-[#FF9494] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+        >
+          Price: Low to High
+        </button>
+        <button
+          onClick={() => setSortOrder('desc')}
+          className={`px-6 py-3 rounded-md font-semibold transition duration-300
+            ${sortOrder === 'desc' ? 'bg-[#FF9494] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+        >
+          Price: High to Low
+        </button>
+        <button
+          onClick={() => setSortOrder(null)}
+          className={`px-6 py-3 rounded-md font-semibold transition duration-300
+            ${sortOrder === null ? 'bg-[#FF9494] text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+        >
+          Reset Sort
+        </button>
+      </div>
+
+      {sortedPackages.length === 0 ? (
         <div className="text-center text-2xl text-gray-600 py-16">
           No tour packages are available at the moment. Please check back later!
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {packages.map((pkg) => (
-            <div key={pkg._id} className="bg-white rounded-lg shadow-xl overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-2xl hover:scale-102">
+        <motion.div // Apply motion to the grid container
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          {sortedPackages.map((pkg) => (
+            <motion.div // Apply motion to each card
+              key={pkg._id}
+              className="bg-white rounded-lg shadow-xl overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-2xl hover:scale-102"
+              variants={itemVariants} // Use item variants for individual card animation
+            >
               <img
-                src={pkg.image} // Assuming your package object has an 'image' field for the URL
+                src={pkg.image}
                 alt={pkg.tripTitle}
                 className="w-full h-56 object-cover"
               />
@@ -111,18 +122,17 @@ const AllTrips = () => {
                 </p>
                 <div className="flex items-center justify-between mb-4">
                   <span className="text-2xl font-extrabold text-[#FF9494]">${pkg.price}</span>
-                  {/* You might want to add duration, group size, etc. here if available */}
                 </div>
                 <Link
-                  to={`/packages/${pkg._id}`} // Link to the specific package details page
+                  to={`/packages/${pkg._id}`}
                   className="block w-full bg-[#FF9494] text-white py-3 px-6 rounded-md text-center text-lg font-semibold hover:bg-[#E07B7B] transition duration-300"
                 >
                   View Details
                 </Link>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       )}
     </div>
   );
