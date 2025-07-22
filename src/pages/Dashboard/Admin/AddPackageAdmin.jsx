@@ -1,46 +1,27 @@
-// import React from 'react';
 
-// const AddPackageAdmin = () => {
-//   return (
-//     <div className="p-4 bg-white rounded-lg shadow-md">
-//       <h1 className="text-3xl font-bold text-[#FF9494] mb-6">Admin: Add New Tour Package</h1>
-//       <p>This page will contain the form to add new tour packages.</p>
-//     </div>
-//   );
-// };
-
-// export default AddPackageAdmin;
-
-// code -3 // 
-// src/pages/Dashboard/Admin/AddPackageAdmin.jsx
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { toast } from 'react-hot-toast';
-import useAxiosSecure from '../../../hooks/useAxiosSecure'; // Assuming you have this hook
-// import useTourGuides from '../../../hooks/useTourGuides'; // REMOVED: Not needed for manual ID input
+import useAxiosSecure from '../../../hooks/useAxiosSecure'; 
+
 
 const AddPackageAdmin = () => {
   const axiosSecure = useAxiosSecure();
-  // REMOVED: No longer fetching tour guides for a dropdown
-  // const { data: tourGuides = [], isLoading: guidesLoading } = useTourGuides();
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm();
   const [tourPlanFields, setTourPlanFields] = useState([{ day: 'Day 1', title: '', description: '' }]);
-  const [selectedImages, setSelectedImages] = useState([]); // State to hold selected image URLs for the 'images' array
+  const [selectedImages, setSelectedImages] = useState([]); 
 
-  // Function to add a new day to the tour plan
   const addTourPlanDay = () => {
     setTourPlanFields([...tourPlanFields, { day: `Day ${tourPlanFields.length + 1}`, title: '', description: '' }]);
   };
 
-  // Function to remove a day from the tour plan
   const removeTourPlanDay = (index) => {
     const newFields = [...tourPlanFields];
     newFields.splice(index, 1);
     setTourPlanFields(newFields);
   };
 
-  // Handle image selection for the 'images' array (can be extended for image upload if needed)
   const handleAddImage = () => {
     const imageUrl = prompt("Enter image URL:");
     if (imageUrl && !selectedImages.includes(imageUrl)) {
@@ -106,17 +87,12 @@ const AddPackageAdmin = () => {
   };
 
 
-  // REMOVED: Loading state for tour guides is no longer needed
-  // if (guidesLoading) {
-  //     return <div className="text-center py-10">Loading tour guides...</div>;
-  // }
-
   return (
     <div className="p-4 bg-white rounded-lg shadow-md">
       <h1 className="text-3xl font-bold text-[#FF9494] mb-6 text-center">Admin: Add New Tour Package</h1>
       <p className="text-center text-gray-600 mb-8">Fill out the form below to add a new tour package.</p>
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Trip Title */}
+
         <div>
           <label htmlFor="tripTitle" className="block text-sm font-medium text-gray-700">Trip Title</label>
           <input
@@ -249,20 +225,19 @@ const AddPackageAdmin = () => {
           </button>
         </div>
 
-        {/* ---- START OF MODIFIED UI FOR TOUR GUIDE IDs (Manual Input) ---- */}
+        {/* ---- START OF MODIFIED UI FOR TOUR GUIDE IDs ---- */}
         <div>
           <label htmlFor="tourGuideIds" className="block text-sm font-medium text-gray-700">Assign Tour Guide IDs (comma-separated)</label>
           <input
             type="text"
             id="tourGuideIds"
-            {...register('tourGuideIds', { required: 'At least one Tour Guide ID is required' })} // Changed from 'tourGuides' to 'tourGuideIds'
+            {...register('tourGuideIds', { required: 'At least one Tour Guide ID is required' })} 
             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
             placeholder="e.g., 654c687645cb2e8b83c6777a3abc, 654c687645cb2e8b83c6777a3abd"
           />
           <p className="text-sm text-gray-500 mt-1">Enter one or more MongoDB `_id`s of tour guides, separated by commas.</p>
           {errors.tourGuideIds && <span className="text-red-500 text-xs">{errors.tourGuideIds.message}</span>}
         </div>
-        {/* ---- END OF MODIFIED UI FOR TOUR GUIDE IDs (Manual Input) ---- */}
 
         <button
           type="submit"
