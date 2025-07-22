@@ -24,23 +24,22 @@ const AllTrips = () => {
     return <div className="text-center py-8 text-red-600 text-xl font-bold">Error: {error.message}</div>;
   }
 
-  // Create a mutable copy of packages for sorting
+
   const sortedPackages = packages ? [...packages].sort((a, b) => {
     if (sortOrder === 'asc') {
-      return a.price - b.price; // Sort low to high
+      return a.price - b.price; 
     } else if (sortOrder === 'desc') {
-      return b.price - a.price; // Sort high to low
+      return b.price - a.price; 
     }
-    return 0; // No sorting if sortOrder is null
+    return 0; 
   }) : [];
 
-  // Framer Motion variants for staggered animation of cards
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1 // Stagger each child by 0.1 seconds
+        staggerChildren: 0.1 
       }
     }
   };
@@ -68,7 +67,6 @@ const AllTrips = () => {
         From cultural explorations to thrilling escapades, we have something for everyone.
       </p>
 
-      {/* Sorting Controls */}
       <div className="flex justify-center gap-4 mb-8">
         <button
           onClick={() => setSortOrder('asc')}
@@ -98,17 +96,17 @@ const AllTrips = () => {
           No tour packages are available at the moment. Please check back later!
         </div>
       ) : (
-        <motion.div // Apply motion to the grid container
+        <motion.div 
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
           variants={containerVariants}
           initial="hidden"
           animate="visible"
         >
           {sortedPackages.map((pkg) => (
-            <motion.div // Apply motion to each card
+            <motion.div 
               key={pkg._id}
               className="bg-white rounded-lg shadow-xl overflow-hidden border border-gray-200 transition-all duration-300 hover:shadow-2xl hover:scale-102"
-              variants={itemVariants} // Use item variants for individual card animation
+              variants={itemVariants} 
             >
               <img
                 src={pkg.image}
