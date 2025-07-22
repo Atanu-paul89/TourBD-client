@@ -1,24 +1,24 @@
 import React, { useState, useContext } from 'react';
-import { useParams, Link } from 'react-router'; // Changed to react-router-dom for Link
+import { useParams, Link } from 'react-router'; 
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
-import { Toaster, toast } from 'react-hot-toast'; // For notifications
-import { AuthContext } from '../providers/AuthContext'; // Correct path to AuthContext
-import useAxiosSecure from '../../src/hooks/useAxiosSecure'; // Correct path to useAxiosSecure
+import { Toaster, toast } from 'react-hot-toast'; 
+import { AuthContext } from '../providers/AuthContext'; 
+import useAxiosSecure from '../../src/hooks/useAxiosSecure'; 
 
 const PackageDetails = () => {
-    const { id } = useParams(); // Get the package ID from the URL
-    const { user, logOut } = useContext(AuthContext); // Get logged-in user and logOut from AuthContext
-    const axiosSecure = useAxiosSecure(); // Initialize useAxiosSecure
+    const { id } = useParams(); 
+    const { user, logOut } = useContext(AuthContext); 
+    const axiosSecure = useAxiosSecure(); 
 
-    // State for form inputs
+
     const [selectedDate, setSelectedDate] = useState(null);
     const [selectedGuideId, setSelectedGuideId] = useState('');
-    const [bookingSuccess, setBookingSuccess] = useState(false); // <-- NEW STATE: Controls post-booking UI
+    const [bookingSuccess, setBookingSuccess] = useState(false); 
 
-    // Query to fetch package details
+
     const { data: packageDetails, isLoading: packageLoading, isError: packageError, error: packageFetchError } = useQuery({
         queryKey: ['packageDetails', id],
         queryFn: async () => {
@@ -30,7 +30,7 @@ const PackageDetails = () => {
         enabled: !!id,
     });
 
-    // Query to fetch tour guide details for the package
+
     const { data: tourGuidesForPackage, isLoading: guidesLoading, isError: guidesError, error: guidesFetchError } = useQuery({
         queryKey: ['tourGuidesForPackage', id, packageDetails?.tourGuides],
         queryFn: async () => {
@@ -46,7 +46,7 @@ const PackageDetails = () => {
         enabled: !!packageDetails && packageDetails.tourGuides && packageDetails.tourGuides.length > 0,
     });
 
-    // Handle booking form submission
+
     const handleBookingSubmit = async (e) => {
         e.preventDefault();
 
@@ -75,14 +75,14 @@ const PackageDetails = () => {
             packageName: packageDetails.tripTitle,
             packageType: packageDetails.tourType,
             packagePrice: packageDetails.price,
-            tourDate: selectedDate.toISOString(), // Convert date to ISO string for backend
+            tourDate: selectedDate.toISOString(), 
             tourGuideId: selectedGuideId,
-            tourGuideEmail: tourGuidesForPackage.find(g => g._id === selectedGuideId)?.email, // Get guide email for backend
-            tourGuideName: tourGuidesForPackage.find(g => g._id === selectedGuideId)?.name, // Get guide name for backend
-            userEmail: user.email, // Read-only from context
-            userName: user.displayName, // Read-only from context
-            userPhoto: user.photoURL, // Read-only from context
-            status: 'pending', // Initial status
+            tourGuideEmail: tourGuidesForPackage.find(g => g._id === selectedGuideId)?.email, 
+            tourGuideName: tourGuidesForPackage.find(g => g._id === selectedGuideId)?.name, 
+            userEmail: user.email, 
+            userName: user.displayName, 
+            userPhoto: user.photoURL, 
+            status: 'pending', 
         };
 
         try {
@@ -90,9 +90,9 @@ const PackageDetails = () => {
 
             if (res.data.bookingId) {
                 toast.success("Tour booked successfully!");
-                setSelectedDate(null); // Clear form
-                setSelectedGuideId(''); // Clear form
-                setBookingSuccess(true); // <-- Set success state to true
+                setSelectedDate(null); 
+                setSelectedGuideId(''); 
+                setBookingSuccess(true); 
             } else {
                 toast.error("Failed to book tour. Please try again.");
             }
@@ -100,9 +100,8 @@ const PackageDetails = () => {
             console.error("Booking error:", error);
             if (error.response?.status === 401 || error.response?.status === 403) {
                 toast.error("Unauthorized access. Please log in again.");
-                await logOut(); // Log out on unauthorized access
-                // You might also want to navigate('/login') here if not handled by AuthContext
-            } else if (error.response?.status === 409) { // Handle 409 Conflict for duplicate pending booking
+                await logOut(); 
+            } else if (error.response?.status === 409) { 
                 toast.error(error.response.data.message);
             }
             else if (error.response?.data?.message) {
@@ -138,7 +137,7 @@ const PackageDetails = () => {
 
     return (
         <div className="container mx-auto px-4 py-12">
-            <Toaster /> {/* Toast notifications will appear here */}
+            <Toaster /> 
             <h1 className="text-4xl md:text-5xl font-extrabold text-[#FF9494] text-center mb-6">
                 {tripTitle}
             </h1>
@@ -226,7 +225,7 @@ const PackageDetails = () => {
             <div className="bg-white p-8 rounded-lg shadow-lg">
                 <h2 className="text-3xl font-bold text-gray-800 mb-6">Book This Trip</h2>
                 {user ? (
-                    // Conditional rendering: Show form OR success message based on bookingSuccess state
+
                     bookingSuccess ? (
                         <div className="text-center py-10">
                             <h3 className="text-2xl font-semibold text-green-600 mb-4">
@@ -250,9 +249,8 @@ const PackageDetails = () => {
                             </button>
                         </div>
                     ) : (
-                        // Original booking form
                         <form onSubmit={handleBookingSubmit} className="space-y-6">
-                            {/* Package Name (Read-only) */}
+                            
                             <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Package Name</label>
                                 <input
@@ -263,7 +261,6 @@ const PackageDetails = () => {
                                 />
                             </div>
 
-                            {/* User Name (Read-only) */}
                             <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Your Name</label>
                                 <input
@@ -274,7 +271,6 @@ const PackageDetails = () => {
                                 />
                             </div>
 
-                            {/* User Email (Read-only) */}
                             <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Your Email</label>
                                 <input
@@ -285,14 +281,14 @@ const PackageDetails = () => {
                                 />
                             </div>
 
-                            {/* User Photo URL (Read-only, hidden input) */}
+                       
                             <input
                                 type="hidden"
                                 value={user?.photoURL || ''}
                                 readOnly
                             />
 
-                            {/* Price (Read-only) */}
+                      
                             <div>
                                 <label className="block text-gray-700 text-sm font-bold mb-2">Price</label>
                                 <input
@@ -311,10 +307,10 @@ const PackageDetails = () => {
                                     selected={selectedDate}
                                     onChange={(date) => setSelectedDate(date)}
                                     dateFormat="MMMM d, yyyy"
-                                    minDate={new Date()} // Prevent selecting past dates
+                                    minDate={new Date()} 
                                     placeholderText="Click to select a date"
                                     className="shadow appearance-none border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:shadow-outline cursor-pointer"
-                                    wrapperClassName="w-full" // Apply full width to the date picker wrapper
+                                    wrapperClassName="w-full" 
                                 />
                             </div>
 
