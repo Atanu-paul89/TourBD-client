@@ -67,31 +67,27 @@ const AuthProvider = ({ children }) => {
       // console.log('Current User (Firebase):', currentUser);
 
       if (currentUser) {
-        // 1. User is logged in via Firebase. Now, get/save user data in your DB and get JWT.
+        // 1. User is logged in via Firebase. 
         try {
-          // Post user data to your backend to save/check role.
-          // This call now also triggers the JWT creation process on the backend.
+
           const userDbSaveRes = await axios.post('http://localhost:5000/users', {
             email: currentUser.email,
             displayName: currentUser.displayName,
             photoURL: currentUser.photoURL,
           });
-          // console.log('Backend User Save/Check Response:', userDbSaveRes.data);
 
           // Request JWT from your backend
           const jwtRes = await axios.post('http://localhost:5000/jwt', {
             email: currentUser.email
           });
-          // console.log('JWT Response:', jwtRes.data);
 
           // Store the JWT in localStorage
           if (jwtRes.data.token) {
-            localStorage.setItem('access-token', jwtRes.data.token); // <--- Store the token
+            localStorage.setItem('access-token', jwtRes.data.token); 
           }
 
-          // Fetch the full user data with role from your backend (after JWT is stored)
+          // Fetch the full user data with role 
           const roleRes = await axios.get(`http://localhost:5000/users/email/${currentUser.email}`);
-          // console.log('Backend Role Fetch Response:', roleRes.data);
 
           setUser({
             ...currentUser,
@@ -100,15 +96,15 @@ const AuthProvider = ({ children }) => {
 
         } catch (error) {
           console.error("Error during authentication flow (DB save/JWT/Role fetch):", error);
-          // If any of these steps fail, clean up token and set user to null
+
           localStorage.removeItem('access-token');
           setUser(null);
         } finally {
           setLoading(false);
         }
       } else {
-        // No user logged in or logged out
-        localStorage.removeItem('access-token'); // <--- IMPORTANT: Ensure token is removed if no user
+
+        localStorage.removeItem('access-token'); 
         setUser(null);
         setLoading(false);
       }

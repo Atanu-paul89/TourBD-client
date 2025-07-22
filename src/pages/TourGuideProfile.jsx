@@ -1,13 +1,13 @@
 import React from 'react';
-import { useParams } from 'react-router'; // <--- CHANGE: Import useParams from 'react-router-dom'
+import { useParams } from 'react-router'; 
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
 const TourGuideProfile = () => {
-  const { id } = useParams(); // Get the ID from the URL
+  const { id } = useParams(); 
 
   const { data: tourGuide, isLoading, isError, error } = useQuery({
-    queryKey: ['tourGuide', id], // Unique key for this query
+    queryKey: ['tourGuide', id], 
     queryFn: async () => {
       if (!id) {
         throw new Error('Tour Guide ID is missing');
@@ -15,8 +15,8 @@ const TourGuideProfile = () => {
       const response = await axios.get(`http://localhost:5000/tour-guides/${id}`);
       return response.data;
     },
-    enabled: !!id, // Only enable the query if `id` is available
-    refetchOnWindowFocus: false, // Optional: Add refetchOnWindowFocus: false
+    enabled: !!id, 
+    refetchOnWindowFocus: false, 
   });
 
   if (isLoading) {
@@ -66,7 +66,6 @@ const TourGuideProfile = () => {
           </div>
         </div>
 
-        {/* You can add a section here for stories added by the tour guide if you implement that feature later */}
       </div>
     </div>
   );
