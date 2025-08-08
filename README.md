@@ -1,4 +1,4 @@
-TourBD: Explore Bangladesh - Your Ultimate Travel Companion
+**TourBD: Explore Bangladesh - Your Ultimate Travel Companion**
 <img width="1885" height="917" alt="Screenshot 2025-08-08 125405" src="https://github.com/user-attachments/assets/caff8b6a-23f3-4a34-8762-03adbca18c7b" />
 
 **Description**
