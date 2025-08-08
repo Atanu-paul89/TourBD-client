@@ -1,14 +1,16 @@
 **TourBD: Explore Bangladesh - Your Ultimate Travel Companion**
 <img width="1885" height="917" alt="Screenshot 2025-08-08 125405" src="https://github.com/user-attachments/assets/caff8b6a-23f3-4a34-8762-03adbca18c7b" />
 
-**Description**
+****Description****
 
 TourBD is a full-stack MERN (MongoDB, Express.js, React.js, Node.js) application designed to connect travelers with the enchanting beauty and rich culture of Bangladesh. It provides a comprehensive platform for discovering tour packages, managing bookings, and engaging with a vibrant community of fellow travelers.
 
 **Live Demo**
- Please Visit: https://a12-tourbd.web.app/
+
+ Please visit: https://a12-tourbd.web.app/
 
 **Features**
+
 TourBD offers a robust set of features categorized by user roles:
 
 **General Features (Accessible to All)**
